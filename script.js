@@ -29,13 +29,11 @@ function mudar(){
     }
 
     if(seconds == 0  && minutes != 0 ){
-        console.log('entrou segunos');
         seconds=60
         minutes--
     }
     
     if(minutes == 0 && hours != 0){
-        console.log('entrou minutos');
         minutes=59
         seconds=60
         hours--
