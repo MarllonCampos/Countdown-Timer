@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap');
+
+        *{
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            outline: none;
+            user-select:none;
+        }
+
+
+        body{
+            background-color: white;
+            min-height: 100vh;
+            overflow:hidden;
+
+            display:flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .form-container{
+            border:1px solid #888;
+            padding: 16px 32px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            max-width: 425px;
+            max-height: 215px;
+            background-color: #e1e1e6;
+        }
+
+        .form-container .phrase,.form-container .time{
+            margin-bottom:12px;
+            display:flex;
+            align-items: flex-start;
+        }
+        .form-container .phrase h4,.form-container .time h4{
+            margin-right: 8px;
+        }
+        .form-container .phrase textarea{
+            padding:4px 6px;
+            font-size:11px;
+            font-family: Roboto, sans-serif;
+            min-width: 200px;
+            min-height: 40px;
+            max-width: 305px;
+            max-height: 125px;
+
+        }
+
+        .form-container .time input{
+            width: 60px;
+            height: 20px;
+            padding:4px 6px;
+        }
+
+        .form-container button{
+            border-radius: 4px;
+            border:1px solid #666;
+            pointer-events: all;
+        }
+
+        
+
+
+
+
+
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="phrase">
+            <h4>Frase: </h4><textarea> </textarea>
+        </div>
+        <div class="time"> 
+            <h4>Tempo: </h4>
+            <input type="number" name="hours" id="hour" max="60">:<input type="number" name="minutes" id="min" max="60">: <input type="number" name="seconds" id="sec">
+        </div>
+
+        <button>Enviar</button>
+    </div>
+    
+
+    <script>
+        let buttonSend = document.querySelector('.form-container button')
+
+        buttonSend.addEventListener("click",getValues)
+
+         function getValues(){
+            const frase = (document.querySelector('textarea').value).trim()
+
+            const hours = Number(document.querySelector('#hour').value) || 0 
+
+            const minutes = Number(document.querySelector('#min').value) || 0 
+            const seconds = Number(document.querySelector('#sec').value)  || 0
+
+            let {error,message} =  validateAll(frase,hours,minutes,seconds)
+
+            if (error != false){
+                alert(`Ocorreu o seguinte erro: \n${message}`)
+                return
+            }
+
+            const org = {frase,hours,minutes,seconds}
+
+            setOnLocalStorage(org)
+        }
+
+         function validateAll(frase=null,hours=63,minutes=63,seconds=63){
+
+            if (frase === null || frase.length < 2 || frase == ''){
+                return ({error:true,message:'Frase esta vazia'})
+            }
+
+            if (hours > 12 || hours < 0){
+                return {error:true,message: 'Campo de horas esta incorreto'}
+            }
+
+            if(minutes > 60 || minutes < 0){
+                return {error:true,message:'Campo de minutos esta incorreto'}
+            }
+
+            if (seconds>60 || seconds < 0){
+                return {error:true,message:'Campo de segundos esta incorreto'}
+            }
+
+            if (minutes == 0 && hours == 0 && seconds == 0){
+                return{error:true,message:'Escolha um tempo para o timer'}
+            }
+
+            return {error:false,message:'Doesnt have error'}
+
+            
+        }
+
+        function setOnLocalStorage(org){
+          localStorage.setItem("Tempo",JSON.stringify(org))
+          location.replace("index.html")
+        }
+    </script>
+</body>
+</html>
